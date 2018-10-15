@@ -1,6 +1,6 @@
 import re
 import sys
-
+import getpass
 
 def strengthCheck(password):
     '''
@@ -31,4 +31,4 @@ def strengthCheck(password):
         output += "{}: {}\n".format(key, error[key])
     print(output)
 
-strengthCheck(input("Enter Password: "))
+strengthCheck(getpass.getpass("Enter Password: "))
