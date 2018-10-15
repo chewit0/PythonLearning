@@ -2,6 +2,7 @@ import re
 import sys
 import getpass
 
+
 def strengthCheck(password):
     '''
     Outputs the strength of provided password based on requiremnts

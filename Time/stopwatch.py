@@ -11,16 +11,16 @@ total = 0
 while True:
     run = input()
     newlap = time.time()
-    laptime = newlap - lastlap    
+    laptime = newlap - lastlap
     lastlap = newlap
     total += laptime
     print("Lap {}: {}".format(lap, laptime))
     print("Total: {}".format(total))
     lap += 1
 
-    if run =='q':
-        finaltime = time.time() 
-        break 
+    if run == 'q':
+        finaltime = time.time()
+        break
 
 runtime = finaltime - start
 print("Total time = {}".format(runtime))
