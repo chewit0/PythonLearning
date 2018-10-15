@@ -1,38 +1,34 @@
 import re
 import sys
-
-
-def isNone(regex, target):
-    return re.search(regex, target) is None
-
+import getpass
 
 def strengthCheck(password):
+    '''
+    Outputs the strength of provided password based on requiremnts
+    e.g. Atleast one: Uppercase, lowercase, digit, symbol and length
+    Provide the password when calling the script. e.g.
+    python3 passwordStrength ' TestPassword123!'
+    '''
 
     requirements = {
-        "capital_err": '[A-Z]',
-        "lower_err": '[a-z]',
-        "symbol_err": '\W',
-        "numeric_err": '\d',
-        "length_err": '[\d\w\W]{8,}',
+        "Uppercase Error": '[A-Z]',
+        "Lowercase Error": '[a-z]',
+        "Symbol Error": '\W',
+        "Digit Error": '\d',
+        "Length Error": '[\d\w\W]{8,}',
     }
     error = {
-        "capital_err": True,
-        "lower_err": True,
-        "symbol_err": True,
-        "numeric_err": True,
-        "length_err": True,
+        "Uppercase Error": True,
+        "Lowercase Error": True,
+        "Symbol Error": True,
+        "Digit Error": True,
+        "Length Error": True,
     }
-    output = ''
- 
+    output = '\n'
+
     for key in requirements:
-        error[key] = isNone(requirements[key], password)
+        error[key] = re.search(requirements[key], password) is None
         output += "{}: {}\n".format(key, error[key])
-    return output
+    print(output)
 
-
-def main(argv):
-    password = argv
-    print(strengthCheck(password))
-
-if __name__ == "__main__":
-    main(sys.argv[1])
+strengthCheck(getpass.getpass("Enter Password: "))
