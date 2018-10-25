@@ -8,8 +8,12 @@ from bs4 import BeautifulSoup
 from datetime import date
 from glob import glob
 from email.message import EmailMessage
+
 # Set path for bundle_json file
-path = 'PythonLearning/Web/HumbleBundle/'
+path = '/'
+recipent = ['recipent@email.com']
+sender = 'sender@email.com'
+gmailpassword = ''
 
 
 def get_webpage(url):
@@ -131,18 +135,17 @@ def check_change(old_path, old, new):
 def email_update(data):
     
     print("Emailing update...")
-    recipent = ['joevintentest@gmail.com']
     contents = json.dumps(data, indent=4, ensure_ascii=False)
     msg = EmailMessage()
     msg.set_content(contents)
     msg['Subject'] = 'Humble Bundle Update'
-    msg['From'] = 'joevintentest@gmail.com'
+    msg['From'] = sender
     msg['To'] = recipent
-    gmailpassword = 'Interoute01!'
+    
 
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
-    s.login('joevintentest@gmail.com', gmailpassword)
+    s.login(sender, gmailpassword)
     s.send_message(msg)
     s.quit()
 
