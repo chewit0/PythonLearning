@@ -138,7 +138,7 @@ def email_update(data):
     msg['Subject'] = 'Humble Bundle Update'
     msg['From'] = 'joevintentest@gmail.com'
     msg['To'] = recipent
-    gmailpassword = 'Interoute01!'
+    
 
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
