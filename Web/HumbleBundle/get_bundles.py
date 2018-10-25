@@ -9,11 +9,17 @@ from datetime import date
 from glob import glob
 from email.message import EmailMessage
 
-# Set path for bundle_json file
-path = '/'
-recipent = ['recipent@email.com']
-sender = 'sender@email.com'
-gmailpassword = ''
+# config
+configpath = 'bundle.conf'
+with open(configpath, 'r') as f:
+    config = json.loads(f.read())
+
+recipent = config['recipent']
+sender = config['sender']
+gmailpassword = config['gmailpassword']
+path = config['path']
+
+print(sender, recipent, gmailpassword, path)
 
 
 def get_webpage(url):
@@ -69,7 +75,7 @@ def populate_bundle_dict(bundles):
     '''
     bundles_dict = bundles
     for key in bundles_dict:
-        url = list(bundles_dict[key].keys())[0]  
+        url = list(bundles_dict[key].keys())[0]
         soup = get_webpage(url)
 
         sections = soup.find_all("div", attrs={"class": "main-content-row"})
@@ -122,7 +128,8 @@ def check_change(old_path, old, new):
 
         with open(filename, 'w') as f:
             f.write(json.dumps(new, indent=4))
-        if old_path is not 'None': 
+            f.close()
+        if old_path is not 'None':
             os.remove(old_path)
         print("{} removed and replaced with {}".format(old_path, filename))
 
@@ -133,7 +140,7 @@ def check_change(old_path, old, new):
 
 
 def email_update(data):
-    
+
     print("Emailing update...")
     contents = json.dumps(data, indent=4, ensure_ascii=False)
     msg = EmailMessage()
@@ -141,7 +148,6 @@ def email_update(data):
     msg['Subject'] = 'Humble Bundle Update'
     msg['From'] = sender
     msg['To'] = recipent
-    
 
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
@@ -153,7 +159,7 @@ def email_update(data):
 def main():
 
     new = populate_bundle_dict(get_bundles())
-    try: 
+    try:
         old_path = glob(path + 'bundle_json*')[0]
     except IndexError:
         print("No previous file found! Creating file and sending to recipent")
@@ -166,6 +172,7 @@ def main():
         old = 'None'
 
     check_change(old_path, old, new)
+
 
 if __name__ == "__main__":
     main()
