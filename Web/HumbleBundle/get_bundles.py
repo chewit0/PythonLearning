@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 from datetime import date
 from glob import glob
 from email.message import EmailMessage
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 
 # config
 configpath = 'bundle.conf'
@@ -18,8 +20,6 @@ recipent = config['recipent']
 sender = config['sender']
 gmailpassword = config['gmailpassword']
 path = config['path']
-
-print(sender, recipent, gmailpassword, path)
 
 
 def get_webpage(url):
@@ -41,9 +41,15 @@ def get_bundles():
 
     of  Title and URL to currently available bundles
     '''
-    driver = webdriver.Firefox()
+    # driver = webdriver.Firefox()
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(chrome_options=chrome_options)
+    print("Opening Chrome...")
     driver.implicitly_wait(2)
+
     driver.get("http://www.humblebundle.com")
+    print("At humblebundle.com, fetching bundles...")
     bundles_dict = OrderedDict()
 
     bundle_dropdown = driver.find_element_by_class_name(
@@ -159,6 +165,8 @@ def email_update(data):
 def main():
 
     new = populate_bundle_dict(get_bundles())
+    print("Looking in {} for previous bundles file..."
+          .format(os.getcwd() + "/" + path))
     try:
         old_path = glob(path + 'bundle_json*')[0]
     except IndexError:
