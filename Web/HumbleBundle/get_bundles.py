@@ -139,8 +139,13 @@ def check_change(old_path, old, new):
             os.remove(old_path)
         print("{} removed and replaced with {}".format(old_path, filename))
 
-        email_update(new)
-
+        try:
+            email_update(new)
+        except TypeError:
+            print("Could not email update: config file incorrect")
+        except SMTPAuthenticationError as e:
+            print("Could not email update: config file incorrect: {}"
+                  .format(e))
     else:
         print("No changes")
 
